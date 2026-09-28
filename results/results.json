@@ -1,0 +1,114 @@
+{
+  "task_a_forecast": {
+    "models": {
+      "seasonal_naive": {
+        "wape": 0.40920448134117837,
+        "bias": -0.031030869670347384,
+        "per_cutoff_wape": {
+          "2018-06-05": 0.354688021354688,
+          "2018-06-26": 0.4348008385744235,
+          "2018-07-17": 0.4997098084735926,
+          "2018-08-07": 0.35065660799105897
+        }
+      },
+      "lightgbm_global": {
+        "wape": 0.2883177682439734,
+        "bias": -0.06388090335266372,
+        "per_cutoff_wape": {
+          "2018-06-05": 0.23000902211506216,
+          "2018-06-26": 0.39848109502735174,
+          "2018-07-17": 0.33472082674573556,
+          "2018-08-07": 0.2190545210165126
+        }
+      },
+      "lstm": {
+        "wape": 0.3159556591136306,
+        "bias": -0.10865913398566873,
+        "per_cutoff_wape": {
+          "2018-06-05": 0.26551343219349716,
+          "2018-06-26": 0.40223948165862927,
+          "2018-07-17": 0.3400840270638754,
+          "2018-08-07": 0.2774650420008269
+        }
+      }
+    },
+    "lgbm_vs_naive_wape_reduction_pct": 0.295418839747296,
+    "lstm_vs_naive_wape_reduction_pct": 0.22787830163032996,
+    "lgbm_p90_coverage": 0.8690476190476191
+  },
+  "task_b_promise": {
+    "headline": {
+      "alpha": 0.9,
+      "note": "pre-registered P90 model, no selection on test",
+      "model_late_rate": 0.04655037750585785,
+      "olist_late_rate": 0.042384795626139025,
+      "model_avg_promise_days": 22.502889872429055,
+      "olist_avg_promise_days": 25.259932309294456,
+      "promise_reduction_days": 2.757042436865401,
+      "promise_reduction_pct": 0.10914686560149411
+    },
+    "matched_late_rate": {
+      "alpha": 0.92,
+      "note": "lowest alpha with test late rate <= Olist's (selected on test)",
+      "model_late_rate": 0.03686539963551159,
+      "olist_late_rate": 0.042384795626139025,
+      "model_avg_promise_days": 23.89419422025514,
+      "olist_avg_promise_days": 25.259932309294456,
+      "promise_reduction_days": 1.365738089039315,
+      "promise_reduction_pct": 0.054067369315031304
+    },
+    "validation_rule": {
+      "alpha": 0.96,
+      "note": "alpha chosen on 2018-Q1 validation to match Olist's late rate there",
+      "model_late_rate": 0.020827909398594115,
+      "olist_late_rate": 0.042384795626139025,
+      "model_avg_promise_days": 27.967768810205676,
+      "olist_avg_promise_days": 25.259932309294456,
+      "promise_reduction_days": -2.7078365009112204,
+      "promise_reduction_pct": -0.1071988819192071
+    },
+    "olist": {
+      "validation": {
+        "late_rate": 0.12988165680473374,
+        "avg_promise_days": 24.904783037475344,
+        "median_promise_days": 24.0
+      },
+      "test": {
+        "late_rate": 0.042384795626139025,
+        "avg_promise_days": 25.259932309294456,
+        "median_promise_days": 25.0
+      }
+    },
+    "p50": {
+      "alpha": 0.5,
+      "late_rate": 0.24733142410830514,
+      "avg_promise_days": 12.420411351210623,
+      "median_promise_days": 12.0
+    },
+    "p90": {
+      "alpha": 0.9,
+      "late_rate": 0.04655037750585785,
+      "avg_promise_days": 22.502889872429055,
+      "median_promise_days": 21.0
+    },
+    "p50_mae_days": 4.941681853683937,
+    "split": {
+      "train": "2017-01-01..2018-03-31",
+      "validation_for_alpha": "2018-01-01..2018-03-31",
+      "test": "2018-04-01..2018-06-30",
+      "n_train": 63007,
+      "n_test": 19205
+    }
+  },
+  "task_c_capacity": {
+    "capacity_factor": 1.0,
+    "unmet_history": 2003.8214285714284,
+    "unmet_lp": 1971.6346598940638,
+    "unmet_oracle": 1773.75,
+    "total_demand": 12407.0,
+    "unmet_history_pct": 0.16150732881207613,
+    "unmet_lp_pct": 0.15891308615249972,
+    "unmet_oracle_pct": 0.14296364955267188,
+    "lp_reduction_pct": 0.01606269312146813
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "split": {
+    "train": "2017-01-01..2018-03-31",
+    "validation_for_alpha": "2018-01-01..2018-03-31",
+    "test": "2018-04-01..2018-06-30",
+    "n_train": 63007,
+    "n_test": 19205
+  },
+  "features": [
+    "distance_km",
+    "freight",
+    "weight_g",
+    "n_items",
+    "purchase_dow",
+    "customer_state",
+    "seller_state"
+  ],
+  "actual_days_test": {
+    "mean": 10.722572246810726,
+    "median": 9.0
+  },
+  "olist": {
+    "validation": {
+      "late_rate": 0.12988165680473374,
+      "avg_promise_days": 24.904783037475344,
+      "median_promise_days": 24.0
+    },
+    "test": {
+      "late_rate": 0.042384795626139025,
+      "avg_promise_days": 25.259932309294456,
+      "median_promise_days": 25.0
+    }
+  },
+  "p50": {
+    "alpha": 0.5,
+    "late_rate": 0.24733142410830514,
+    "avg_promise_days": 12.420411351210623,
+    "median_promise_days": 12.0
+  },
+  "p90": {
+    "alpha": 0.9,
+    "late_rate": 0.04655037750585785,
+    "avg_promise_days": 22.502889872429055,
+    "median_promise_days": 21.0
+  },
+  "p50_mae_days": 4.941681853683937,
+  "p90_coverage_test": 0.9534496224941421,
+  "headline": {
+    "alpha": 0.9,
+    "note": "pre-registered P90 model, no selection on test",
+    "model_late_rate": 0.04655037750585785,
+    "olist_late_rate": 0.042384795626139025,
+    "model_avg_promise_days": 22.502889872429055,
+    "olist_avg_promise_days": 25.259932309294456,
+    "promise_reduction_days": 2.757042436865401,
+    "promise_reduction_pct": 0.10914686560149411
+  },
+  "matched_late_rate": {
+    "alpha": 0.92,
+    "note": "lowest alpha with test late rate <= Olist's (selected on test)",
+    "model_late_rate": 0.03686539963551159,
+    "olist_late_rate": 0.042384795626139025,
+    "model_avg_promise_days": 23.89419422025514,
+    "olist_avg_promise_days": 25.259932309294456,
+    "promise_reduction_days": 1.365738089039315,
+    "promise_reduction_pct": 0.054067369315031304
+  },
+  "validation_rule": {
+    "alpha": 0.96,
+    "note": "alpha chosen on 2018-Q1 validation to match Olist's late rate there",
+    "model_late_rate": 0.020827909398594115,
+    "olist_late_rate": 0.042384795626139025,
+    "model_avg_promise_days": 27.967768810205676,
+    "olist_avg_promise_days": 25.259932309294456,
+    "promise_reduction_days": -2.7078365009112204,
+    "promise_reduction_pct": -0.1071988819192071
+  },
+  "sweep_test": [
+    {
+      "alpha": 0.5,
+      "late_rate": 0.24733142410830514,
+      "avg_promise_days": 12.420411351210623,
+      "median_promise_days": 12.0
+    },
+    {
+      "alpha": 0.6,
+      "late_rate": 0.18958604530070294,
+      "avg_promise_days": 13.933246550377506,
+      "median_promise_days": 13.0
+    },
+    {
+      "alpha": 0.7,
+      "late_rate": 0.13829731840666493,
+      "avg_promise_days": 15.809893256964331,
+      "median_promise_days": 15.0
+    },
+    {
+      "alpha": 0.8,
+      "late_rate": 0.08888310335850039,
+      "avg_promise_days": 18.340848737307994,
+      "median_promise_days": 17.0
+    },
+    {
+      "alpha": 0.85,
+      "late_rate": 0.06675344962249415,
+      "avg_promise_days": 20.061390262952354,
+      "median_promise_days": 19.0
+    },
+    {
+      "alpha": 0.9,
+      "late_rate": 0.04655037750585785,
+      "avg_promise_days": 22.502889872429055,
+      "median_promise_days": 21.0
+    },
+    {
+      "alpha": 0.92,
+      "late_rate": 0.03686539963551159,
+      "avg_promise_days": 23.89419422025514,
+      "median_promise_days": 23.0
+    },
+    {
+      "alpha": 0.94,
+      "late_rate": 0.028117677688102055,
+      "avg_promise_days": 25.630773236136424,
+      "median_promise_days": 24.0
+    },
+    {
+      "alpha": 0.95,
+      "late_rate": 0.024368653996355117,
+      "avg_promise_days": 26.67602186930487,
+      "median_promise_days": 25.0
+    },
+    {
+      "alpha": 0.96,
+      "late_rate": 0.020827909398594115,
+      "avg_promise_days": 27.967768810205676,
+      "median_promise_days": 27.0
+    },
+    {
+      "alpha": 0.97,
+      "late_rate": 0.017287164800833116,
+      "avg_promise_days": 29.60312418640979,
+      "median_promise_days": 28.0
+    },
+    {
+      "alpha": 0.98,
+      "late_rate": 0.01249674563915647,
+      "avg_promise_days": 32.25446498307733,
+      "median_promise_days": 31.0
+    },
+    {
+      "alpha": 0.99,
+      "late_rate": 0.008018745118458735,
+      "avg_promise_days": 36.47607393907837,
+      "median_promise_days": 35.0
+    }
+  ],
+  "sweep_validation": [
+    {
+      "alpha": 0.5,
+      "late_rate": 0.5640039447731755,
+      "avg_promise_days": 11.570512820512821,
+      "median_promise_days": 11.0
+    },
+    {
+      "alpha": 0.6,
+      "late_rate": 0.48999013806706115,
+      "avg_promise_days": 12.796351084812624,
+      "median_promise_days": 12.0
+    },
+    {
+      "alpha": 0.7,
+      "late_rate": 0.40552268244575934,
+      "avg_promise_days": 14.330966469428008,
+      "median_promise_days": 14.0
+    },
+    {
+      "alpha": 0.8,
+      "late_rate": 0.3179980276134122,
+      "avg_promise_days": 16.480473372781066,
+      "median_promise_days": 16.0
+    },
+    {
+      "alpha": 0.85,
+      "late_rate": 0.2617357001972387,
+      "avg_promise_days": 17.963214990138066,
+      "median_promise_days": 17.0
+    },
+    {
+      "alpha": 0.9,
+      "late_rate": 0.20798816568047337,
+      "avg_promise_days": 20.109467455621303,
+      "median_promise_days": 19.0
+    },
+    {
+      "alpha": 0.92,
+      "late_rate": 0.182396449704142,
+      "avg_promise_days": 21.307149901380672,
+      "median_promise_days": 20.0
+    },
+    {
+      "alpha": 0.94,
+      "late_rate": 0.1557199211045365,
+      "avg_promise_days": 22.878303747534517,
+      "median_promise_days": 21.0
+    },
+    {
+      "alpha": 0.95,
+      "late_rate": 0.13634122287968442,
+      "avg_promise_days": 23.912426035502957,
+      "median_promise_days": 22.0
+    },
+    {
+      "alpha": 0.96,
+      "late_rate": 0.12100591715976332,
+      "avg_promise_days": 25.149950690335306,
+      "median_promise_days": 23.0
+    },
+    {
+      "alpha": 0.97,
+      "late_rate": 0.10330374753451677,
+      "avg_promise_days": 26.759368836291912,
+      "median_promise_days": 25.0
+    },
+    {
+      "alpha": 0.98,
+      "late_rate": 0.08683431952662722,
+      "avg_promise_days": 28.98180473372781,
+      "median_promise_days": 27.0
+    },
+    {
+      "alpha": 0.99,
+      "late_rate": 0.058431952662721894,
+      "avg_promise_days": 33.10024654832347,
+      "median_promise_days": 31.0
+    }
+  ],
+  "monthly_test": [
+    {
+      "month": "2018-04",
+      "olist_late_rate": 0.045961422543701023,
+      "model_late_rate": 0.044755877034358044,
+      "olist_avg_promise": 24.2706449668475,
+      "model_avg_promise": 22.70177817962628,
+      "n": 6636
+    },
+    {
+      "month": "2018-05",
+      "olist_late_rate": 0.06643462469733656,
+      "model_late_rate": 0.07036924939467312,
+      "olist_avg_promise": 23.479418886198548,
+      "model_avg_promise": 21.94294794188862,
+      "n": 6608
+    },
+    {
+      "month": "2018-06",
+      "olist_late_rate": 0.011742996141586982,
+      "model_late_rate": 0.02214393558127831,
+      "olist_avg_promise": 28.3350109042107,
+      "model_avg_promise": 22.902197617849353,
+      "n": 5961
+    }
+  ]
+}

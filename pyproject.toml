@@ -1,0 +1,23 @@
+[project]
+name = "shipcast"
+version = "0.1.0"
+description = "Shipment demand forecasting and delivery-promise modeling on Olist data"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "duckdb>=1.5.5",
+    "lightgbm>=4.7.0",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.3",
+    "ortools>=9.15.6755",
+    "pandas>=3.0.6",
+    "scikit-learn>=1.9.1",
+    "torch>=2.14.0",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
