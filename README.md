@@ -2,21 +2,21 @@
 
 ## Problem & Headline
 
-We forecast daily shipment volume per Brazilian state 14 days ahead to enable capacity planning. On the same Olist dataset, we predict delivery time and propose promises that are **2.76 days shorter (10.9%)** than Olist's average estimate, achieving a 3.69% late rate at the same promise length where Olist achieves 4.24%.
+We forecast daily shipment volume per Brazilian state 14 days ahead to enable capacity planning. On the same Olist dataset, pre-registered P90 delivery-time promises are **2.76 days (10.9%) shorter** than Olist's average, at a 4.66% late rate vs Olist's 4.24%.
 
 ---
 
 ## Data
 
 - **Source**: Olist Brazilian e-commerce dataset (Kaggle)
-- **Date Range**: 2017-01-01 to 2018-08-21 (~2.5 years)
-- **Volume**: ~100K orders across 27 Brazilian states
-- **Single-Seller Filter**: Retained ~50% of orders (dropped ~50% with multiple sellers)
-- **Delivery Data**: ~50K delivered single-seller orders with non-null distance and delivery dates
+- **Date Range**: 2017-01-01 to 2018-08-21 (~20 months)
+- **Volume**: 97,829 non-canceled orders
+- **Delivery Data**: 93,801 delivered orders with non-null distance (single-seller orders only)
+- **Train/Test Split**: 63,007 training / 19,205 test orders (2018-04-01 to 2018-06-30)
 
 ### Data Notes
 - 2016 excluded: sparse, many gaps
-- 2018-08-30 onward: data snapshot cutoff (orders drop to 0; not real demand decline)
+- 2018-08-22 onward: data cutoff (volume collapses from 08-22; data snapshot ends)
 - May 2018: Brazilian truckers' strike visible as late-delivery spike; included in evaluation
 
 ---
@@ -37,14 +37,13 @@ We forecast daily shipment volume per Brazilian state 14 days ahead to enable ca
    - Never reads beyond cutoff
 
 2. **LightGBM (Global)**: one model for all 27 states
-   - Features: lag1, lag7, lag14, lag28, mean7, mean28, std28, dow, month, horizon, target_dow, is_holiday, state
+   - Features: lag1, lag7, lag14, lag28, mean7, mean28, std7, std28, dow, month, horizon, target_dow, is_holiday, state, snaive, y
    - Objective: tweedie (count data with zeros)
    - Hyperparams: 400 trees, lr=0.05, num_leaves=31
 
-3. **LSTM (Stretch)**: PyTorch RNN with state embeddings
+3. **LSTM**: PyTorch RNN with state embeddings
    - 28-day input sequences, state embedding (dim=4), 1 LSTM layer (hidden=64)
    - Output: all 14 days at once
-   - If not scored by Gate 2, dropped from resume
 
 **Metrics**:
 - **WAPE** (Weighted Absolute % Error): avoids division-by-zero on zero-order days
@@ -59,17 +58,16 @@ We forecast daily shipment volume per Brazilian state 14 days ahead to enable ca
 
 **Model**: Quantile LightGBM
 - Target: actual_days (time from purchase to delivery, whole days)
-- Features: distance, n_items, weight, volume, price, freight, customer_state, seller_state, category, purchase_dow, purchase_month, purchase_hour
+- Features: distance_km, freight, weight_g, n_items, purchase_dow, customer_state, seller_state
 - **Important**: No Olist estimated date in features (avoids circularity)
-- 5 quantiles: α ∈ {0.5, 0.8, 0.85, 0.9, 0.95}
+- Quantiles: α ∈ {0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.92, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99}
 - Promise = ceil(prediction)
 
 **Metrics**:
 - Late rate: share of orders where actual_days > promise
-- Coverage: share of actuals ≤ prediction (should ≈ α)
 - Trade-off: higher α = longer promises, lower late rate
 
-**Headline**: Lowest α where late_rate ≤ Olist's, reporting promise reduction in days and %.
+**Headline**: Pre-registered P90 model (no test-set selection), reporting promise reduction and late rate vs Olist.
 
 ---
 
@@ -77,30 +75,30 @@ We forecast daily shipment volume per Brazilian state 14 days ahead to enable ca
 
 ### Forecast Performance
 
-| Model | Mean WAPE | Mean Bias | Per-Cutoff WAPEs |
+| Model | Pooled WAPE | Pooled Bias | Per-Cutoff WAPEs |
 |-------|-----------|-----------|------------------|
 | **Seasonal-Naive** | 40.92% | -3.10% | c1: 35.47%, c2: 43.48%, c3: 49.97%, c4: 35.07% |
 | **LightGBM** | 28.83% | -6.39% | c1: 23.00%, c2: 39.85%, c3: 33.47%, c4: 21.91% |
 | **LSTM** | 31.60% | -10.87% | c1: 26.55%, c2: 40.22%, c3: 34.01%, c4: 27.75% |
 
-**Improvement**: LightGBM reduces WAPE by **29.5%** vs. seasonal-naive. LSTM reduces WAPE by 22.8%. LightGBM outperforms LSTM at most horizons; LSTM wins at 3 days ahead (27.6% vs 28.6%).
+**Improvement**: LightGBM reduces WAPE by **29.5%** vs. seasonal-naive (mean over cutoffs: 29.56%). LSTM reduces WAPE by 22.8%. LightGBM outperforms LSTM at most horizons; LSTM wins at 3 days ahead (27.6% vs 28.6%).
 
 
 
 ### Delivery Promise Performance
 
-| Alpha | Late Rate | Avg Promise (days) | Coverage | Notes |
-|-------|-----------|-------------------|----------|-------|
-| 0.50 | 24.73% | 12.4 | 50.0% | Aggressive promise |
-| 0.90 | 4.66% | 22.5 | 90.0% | Pre-registered P90 |
-| **0.92** | **3.69%** | **23.9** | **92.0%** | ← Headline (matches Olist rate) |
-| 0.96 | 2.08% | 28.0 | 96.0% | Very conservative |
+| Alpha | Late Rate | Avg Promise (days) | Notes |
+|-------|-----------|-------------------|-------|
+| 0.50 | 24.73% | 12.4 | Aggressive promise |
+| **0.90** | **4.66%** | **22.5** | **← Headline: pre-registered P90** |
+| 0.92 | 3.69% | 23.9 | 1.37 days (5.4%) shorter at 3.69% late; α chosen on test (optimistic) |
+| 0.96 | 2.08% | 28.0 | Very conservative |
 
 **Olist Baseline** (on test set):
 - Late rate: 4.24%
 - Avg promise: 25.26 days
 
-**Headline**: At Olist's late-delivery rate of 4.24%, our P92 promise is **2.76 days shorter (10.9%)**, but achieves 3.69% late rate vs Olist's 4.24%—indicating our trade-off curve sits above theirs at matching promise length.
+**Headline**: Pre-registered P90 promises are **2.76 days (10.9%) shorter** than Olist's, at a 4.66% late rate vs Olist's 4.24%. P90 coverage on test quarter: 95.3%.
 
 ### Plots
 
@@ -118,11 +116,13 @@ We forecast daily shipment volume per Brazilian state 14 days ahead to enable ca
 
 2. **Offline Evaluation**: No A/B test. Real-world performance may differ.
 
-3. **May 2018 Strike**: Late-delivery rates spike late May 2018 (Brazilian truckers' strike). This is captured in the test set; not a model failure but a data quality note.
+3. **May 2018 Strike**: Late-delivery rates spike late May 2018 (Brazilian truckers' strike). Captured in test set; not a model failure but a data quality note.
 
-4. **State Imbalance**: SP dominates (~40% of orders). Small states may be underfitted in the global model. Trade-off accepted for simplicity and single deployment.
+4. **State Imbalance**: SP dominates (~46% of orders in test windows). Small states may be underfitted in the global model. Trade-off accepted for simplicity and single deployment.
 
 5. **Forecast Horizon**: 14 days is medium-term. Longer horizons (30+ days) would require different models (trend extrapolation, external data).
+
+6. **P90 Calibration Drift**: P90 coverage varies across quarters. Coverage was 95.3% on test (Q2 2018), but P90 was late on 20.8% of orders in Q1 2018. Tuning on Q1 failed because calibration does not transfer reliably.
 
 ---
 
@@ -164,13 +164,14 @@ uv sync  # or: pip install -r requirements.txt
 ```bash
 python src/backtest.py
 python src/task_a_lgbm.py
+python src/task_a_lstm.py
 python src/task_b_promise.py
-python src/task_a_lstm.py        # Optional
+python src/task_c_capacity.py
 python src/merge_results.py
 python src/plots.py
 ```
 
-**Time**: ~15 minutes (without LSTM: ~5 minutes)
+**Time**: ~4 minutes
 
 ### Verify Reproducibility
 ```bash
@@ -206,4 +207,3 @@ rm -rf results  # Clean state
 
 **Created**: September 27, 2026
 **Data**: 2017-01-01 to 2018-08-21
-**Status**: ✅ Ready for production evaluation
