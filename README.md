@@ -1,10 +1,8 @@
 # ShipCast: Shipment Demand Forecasting & Delivery-Promise Modeling
 
-**[After running the pipeline, fill this README from `results/results.json`]**
-
 ## Problem & Headline
 
-We forecast daily shipment volume per Brazilian state 14 days ahead to enable capacity planning. On the same Olist dataset, we predict delivery time and propose promises that are **10.9% shorter than Olist's own estimates** while matching their late-delivery rate.
+We forecast daily shipment volume per Brazilian state 14 days ahead to enable capacity planning. On the same Olist dataset, we predict delivery time and propose promises that are **2.76 days shorter (10.9%)** than Olist's average estimate, achieving a 3.69% late rate at the same promise length where Olist achieves 4.24%.
 
 ---
 
@@ -87,11 +85,7 @@ We forecast daily shipment volume per Brazilian state 14 days ahead to enable ca
 
 **Improvement**: LightGBM reduces WAPE by **29.5%** vs. seasonal-naive. LSTM reduces WAPE by 22.8%. LightGBM outperforms LSTM at most horizons; LSTM wins at 3 days ahead (27.6% vs 28.6%).
 
-**Top 5 States**: [e.g., SP, MG, RJ, BA, SC account for 60% of volume]
-- Average WAPE: [X]%
 
-**Remaining States**: 
-- Average WAPE: [X]%
 
 ### Delivery Promise Performance
 
@@ -185,21 +179,17 @@ rm -rf results  # Clean state
 # Numbers should match exactly (fixed seeds: np.random.seed(42), torch.manual_seed(42))
 ```
 
-See `RUN.md` for detailed setup and troubleshooting.
-
 ---
 
-## Files
+## Code
 
-- `PROJECT_ARTIFACT.md` – Complete technical documentation (30+ pages)
-- `RUN.md` – Step-by-step execution guide
-- `results/results.json` – All metrics (pull resume numbers here)
 - `sql/01_daily_volume.sql` – Volume feature engineering
 - `sql/02_orders_b.sql` – Delivery feature engineering
 - `src/backtest.py` – Backtest framework & seasonal-naive
 - `src/task_a_lgbm.py` – LightGBM forecast
-- `src/task_a_lstm.py` – LSTM forecast (optional)
+- `src/task_a_lstm.py` – LSTM forecast
 - `src/task_b_promise.py` – Quantile regression
+- `src/task_c_capacity.py` – Capacity allocation (experimental, not on resume)
 - `src/merge_results.py` – Results consolidation
 - `src/plots.py` – Visualization
 
